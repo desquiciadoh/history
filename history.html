@@ -9,25 +9,6 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
-	<div class="main">
-		<div class="item">
-			<div class="quest"></div>
-			<div class="input">
-				<textarea></textarea>
-			</div>
-			<div class="buttons">
-				<div class="skip" style="margin-right: 2%;">Пропустить</div>
-				<div class="check">Проверить</div>
-			</div>
-			<div class="stats">
-				<div style="margin-right: 1%;">Правильных: <span class="true">0</span>,</div>
-				<div style="margin-right: 1%;">Ошибок: <span class="false">0</span>,</div>
-				<div style="margin-right: 1%;">Пропущено: <span class="skipped">0</span>,</div>
-				<!-- <div style="margin-right: 1%;">Всего: <span class="all">0</span>,</div> -->
-				<div>Процент: <span class="persent">0</span>%</div>
-			</div>
-		</div>
-	</div>
 	<!-- styles -->
 	<style>
 		html, body
@@ -48,10 +29,10 @@
 /*			background-image: linear-gradient(90deg, #0f0c29, #302b63, #24243e);*/
 			background-image: linear-gradient(90deg, #536976, #292E49);
 /*			background-image: linear-gradient(315deg, #012169, #1877F2);*/
-			width: 40%;
+			width: 45%;
 			border-radius: 25px;
 			box-shadow: 0 0 10px black;
-			padding: 2% 0;
+			padding: 2.5% 0;
 		}	
 		.item 
 		{
@@ -71,6 +52,7 @@
   			font-style: normal;
   			color: white;
   			text-shadow: 1px 1px 1px black;
+  			flex-wrap: wrap;
 		}
 		textarea:focus
 		{
@@ -89,6 +71,10 @@
   			border-radius: 10px;
   			box-shadow: 0 0 5px black;
   			transition: 1s;
+  			text-align: center;
+  			display: flex;
+  			justify-content: center;
+  			align-items: center;
 		}
 		.input
 		{
@@ -110,6 +96,7 @@
   			padding: 1% 0;
   			box-shadow: 0 0 5px black;
   			text-align: center;
+  			flex-wrap: wrap;
 		}
 		.buttons
 		{
@@ -134,8 +121,29 @@
   			box-shadow: 0 0 5px black;
   			padding: 2% 0;
   			cursor: pointer;
+  			flex-wrap: wrap;
 		}
 	</style>
+	<!-- html -->
+	<div class="main">
+		<div class="item">
+			<div class="quest"></div>
+			<div class="input">
+				<textarea></textarea>
+			</div>
+			<div class="buttons">
+				<div class="skip" style="margin-right: 2%;">Пропустить</div>
+				<div class="check">Проверить</div>
+			</div>
+			<div class="stats">
+				<div style="margin-right: 1%;">Правильных: <span class="true">0</span>,</div>
+				<div style="margin-right: 1%;">Ошибок: <span class="false">0</span>,</div>
+				<div style="margin-right: 1%;">Пропущено: <span class="skipped">0</span>,</div>
+				<!-- <div style="margin-right: 1%;">Всего: <span class="all">0</span>,</div> -->
+				<div>Процент: <span class="persent">0</span>%</div>
+			</div>
+		</div>
+	</div>
 	<!-- script -->
 	<script type="text/javascript">
 		
@@ -343,7 +351,7 @@
 		}
 
 		check.onclick = function() {
-			if (input.value == '') {
+			if (input.value == 'отмена') {
 				alert('Введите ответ')
 			} else if (input.value == '?') {
 				alert('Вопрос: ' + data[number][0] + '\n' + 'Ответ: ' + data[number][1])
@@ -351,12 +359,12 @@
 				sum++
 				stats[3].textContent = sum
 				if (data[number][1] == input.value.trim().toLowerCase()) {
-					input.style.background = 'rgb(48,255,48)'
 					stats[0].textContent = Number(stats[0].textContent) + 1
-				} else {
-					input.style.background = 'rgb(255,48,48)'
+				} else if (input.value.trim().toLowerCase() != '') {
 					stats[1].textContent = Number(stats[1].textContent) + 1
-					input.value += ' (' + data[number][1] + ')'
+					input.value = data[number][1]
+				} else {
+					input.value = data[number][1]
 				}
 				console.log('Вопрос ' + sum + ' [' + number + ']')
 				stats[3].textContent = Math.round((Number(stats[0].textContent)/sum)*100)
