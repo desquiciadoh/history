@@ -323,15 +323,40 @@
 			['После продолжительной болезни в Москве на 65-м году жизни скончался первый Президент Абхазии В. Г. Ардзинба (число месяца год)','4 марта 2010'],
 		]
 
+		const skipArray = []
+
 		let number = 0
 		let sum = 0
 
 		function start () {
-			let random = Math.floor(Math.random() * data.length)
-			quest.textContent = data[random][0]
-			number = random
+			if (skipArray.length < data.length) {
+				let random = Math.floor(Math.random() * data.length)
+				let find = false
+				for (let i = 0; i < data.length; i++) {
+					if (skipArray[i] == random) {
+						find = true
+					}
+				}
+				if (!find) {
+					quest.textContent = data[random][0]
+					number = random
+					input.value = ''
+					input.style.background = 'lightgrey'
+					skipArray.push(number)
+				} else {
+					start()
+				}
+			} else {
+				alert('Вопросы закончились')
+			}
+		}
+
+		function get (num) {
+			quest.textContent = data[num - 1][0]
+			number = num - 1
 			input.value = ''
 			input.style.background = 'lightgrey'
+			skipArray.push(number)
 		}
 
 		skip.onclick = function () {
@@ -344,7 +369,7 @@
 		}
 
 		check.onclick = function() {
-			if (input.value == '') {
+			if (input.value == 'отмена') {
 				alert('Введите ответ')
 			} else if (input.value == '?') {
 				alert('Вопрос: ' + data[number][0] + '\n' + 'Ответ: ' + data[number][1])
@@ -352,14 +377,15 @@
 				sum++
 				stats[3].textContent = sum
 				if (data[number][1] == input.value.trim().toLowerCase()) {
-					input.style.background = 'rgb(48,255,48)'
 					stats[0].textContent = Number(stats[0].textContent) + 1
-				} else {
-					input.style.background = 'rgb(255,48,48)'
+				} else if (input.value.trim().toLowerCase() != '') {
 					stats[1].textContent = Number(stats[1].textContent) + 1
-					input.value += ' (' + data[number][1] + ')'
+					input.value = data[number][1]
+				} else {
+					input.value = data[number][1]
 				}
-				stats[4].textContent = Math.round((Number(stats[0].textContent)/sum)*100)
+				console.log('Вопрос ' + sum + ' [' + number + ']')
+				stats[3].textContent = Math.round((Number(stats[0].textContent)/sum)*100)
 				setTimeout(() => {
 					start()
 				}, 2000)
