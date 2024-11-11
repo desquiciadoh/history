@@ -330,15 +330,40 @@
 			['После продолжительной болезни в Москве на 65-м году жизни скончался первый Президент Абхазии В. Г. Ардзинба (число месяца год)','4 марта 2010'],
 		]
 
+		const skipArray = []
+
 		let number = 0
 		let sum = 0
 
 		function start () {
-			let random = Math.floor(Math.random() * data.length)
-			quest.textContent = data[random][0]
-			number = random
+			if (skipArray.length < data.length) {
+				let random = Math.floor(Math.random() * data.length)
+				let find = false
+				for (let i = 0; i < data.length; i++) {
+					if (skipArray[i] == random) {
+						find = true
+					}
+				}
+				if (!find) {
+					quest.textContent = data[random][0]
+					number = random
+					input.value = ''
+					input.style.background = 'lightgrey'
+					skipArray.push(number)
+				} else {
+					start()
+				}
+			} else {
+				alert('Вопросы закончились')
+			}
+		}
+
+		function get (num) {
+			quest.textContent = data[num - 1][0]
+			number = num - 1
 			input.value = ''
 			input.style.background = 'lightgrey'
+			skipArray.push(number)
 		}
 
 		skip.onclick = function () {

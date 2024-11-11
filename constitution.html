@@ -186,16 +186,41 @@
 			['Статья 73.1 . Арбитражный суд Республики Абхазия осуществляет правосудие путем разрешения экономических споров и рассмотрения иных дел, отнесенных к его компетенции. '],
 		]
 
+		const skipArray = []
+
 		function start() {
-			globalThis.number = Math.floor(Math.random() * data.length)
-			if (number == 84) {
-				question.textContent = 72.1
-			} else if (number == 85) {
-				question.textContent = 73.1
+			if (skipArray.length < data.length) {
+				globalThis.number = Math.floor(Math.random() * data.length)
+				let find = false
+				for (let i = 0; i < data.length; i++) {
+					if (skipArray[i] == number) {
+						find = true
+					}
+				}
+				if (!find) {
+					if (number == data.length - 2) {
+						question.textContent = 72.1
+					} else if (number == data.length - 1) {
+						question.textContent = 73.1
+					} else {
+						question.textContent = number + 1
+					}
+					skipArray.push(number)
+					answer.textContent = ''
+				} else {
+					start()
+				}
 			} else {
-				question.textContent = number + 1
+				alert('Вопросы закончились')
 			}
-			answer.textContent = ''
+		}
+
+		function get (num) {
+			quest.textContent = data[num - 1][0]
+			number = num - 1
+			input.value = ''
+			input.style.background = 'lightgrey'
+			skipArray.push(number)
 		}
 
 		check.onclick = function () {
